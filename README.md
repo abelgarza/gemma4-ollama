@@ -12,7 +12,7 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-*Note: You must have `ffmpeg` installed on your system for the voice recording features to work.*
+*Note: You must have `ffmpeg` installed on your system for the voice recording features to work, and a system audio player like `mpv` or `mpg123` for the TTS functionality.*
 
 ## Configuration
 
@@ -91,9 +91,26 @@ Performs a hard reset by deleting the existing memory files (`JSONL` and `SQLite
 .venv/bin/python scripts/memory-reset.py --force
 ```
 
-## Usage and Examples
+## Voice Chat Orchestrator (`main.py`)
 
-The `scripts/` directory contains several examples for interacting with the model via both text and audio.
+The `main.py` file is the primary entry point for the end-to-end Voice Chat experience. It orchestrates the entire interaction loop:
+`Audio Input` $\rightarrow$ `Ollama Processing` $\rightarrow$ `Text Response` $\rightarrow$ `TTS (Sintesis de Voz)` $\rightarrow$ `Audio Output`.
+
+**Execution:**
+```bash
+python main.py
+```
+
+**How it works:**
+1. **Monitoring**: It polls `data/live-audio/latest.wav` for new recordings.
+2. **Processing**: Converts the WAV file to base64 and sends it to the `gemma4-audio` model.
+3. **Synthesis**: The text response is converted to speech using `gTTS` (Google Text-to-Speech).
+4. **Playback**: The resulting audio is played automatically via the system player.
+
+### Scripts and Examples
+
+The `scripts/` directory contains specialized tools for granular interaction with the model.
+
 
 ### 1. Voice Chat (`ollama-voice-chat.py`)
 Interact with the assistant using your microphone. The script records short audio chunks, converts them to base64, and streams the assistant's text response.

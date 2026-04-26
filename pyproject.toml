@@ -16,6 +16,7 @@ dependencies = [
     "ollama",
     "requests",
     "python-dotenv",
+    "gTTS",
 ]
 
 [tool.setuptools.packages.find]
