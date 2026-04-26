@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import requests
 
-from src.ollama_audio import wav_to_base64
+from audio_gemma4_ollama import wav_to_base64
 
 
 def main() -> None:

@@ -5,38 +5,33 @@ import os
 
 import ollama
 
-from src.ollama_audio import read_wav_as_base64
+from audio_gemma4_ollama import wav_to_base64
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--audio", default="data/sample-audio/sample.wav")
-    parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL", "gemma4:e4b"))
+    parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL", "gemma4:latest"))
     parser.add_argument(
         "--prompt",
         default=(
-            "Analyze this audio directly. "
-            "Describe spoken language, speaker count, tone, and relevant acoustic events."
+            "The attached audio is the user's message. "
+            "Reply naturally in the same language. "
+            "Do not analyze, describe, or mention the audio."
         ),
     )
     args = parser.parse_args()
 
-    audio_b64 = read_wav_as_base64(args.audio)
+    audio_b64 = wav_to_base64(args.audio)
 
-    response = ollama.chat(
+    response = ollama.generate(
         model=args.model,
-        messages=[
-            {
-                "role": "user",
-                "content": args.prompt,
-                # Mismo truco: bytes WAV por canal multimodal.
-                "images": [audio_b64],
-            }
-        ],
+        prompt=args.prompt,
+        images=[audio_b64],
         stream=False,
     )
 
-    print(response["message"]["content"])
+    print(response["response"])
 
 
 if __name__ == "__main__":

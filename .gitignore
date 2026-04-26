@@ -1,2 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
 .envrc
-__pycache__
+data/live-audio/
+*.egg-info/
+dist/
+build/
