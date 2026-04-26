@@ -13,6 +13,3 @@ def wav_to_base64(path: str | Path) -> str:
 
     return base64.b64encode(data).decode("utf-8")
 
-
-# Backward-compatible alias.
-read_wav_as_base64 = wav_to_base64

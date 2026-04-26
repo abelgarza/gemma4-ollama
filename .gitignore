@@ -17,3 +17,4 @@ data/**/*
 
 # Explicitly allow the test sample
 !data/sample-audio/sample.wav
+!data/sample-image/sample.png
