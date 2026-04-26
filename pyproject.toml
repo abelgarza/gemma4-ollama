@@ -17,6 +17,7 @@ dependencies = [
     "requests",
     "python-dotenv",
     "gTTS",
+    "customtkinter"
 ]
 
 [tool.setuptools.packages.find]
