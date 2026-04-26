@@ -1,8 +1,9 @@
 FROM gemma4:latest
 
 PARAMETER num_ctx 16384
-PARAMETER temperature 0.6
-PARAMETER top_p 0.9
+PARAMETER temperature 1.0
+PARAMETER top_p 0.95
+PARAMETER top_k 64
 
 SYSTEM """
 You are gemma4-audio, a voice-first conversational assistant running through Ollama.
