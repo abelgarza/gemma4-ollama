@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ollama-python-client"
+version = "0.1.0"
+description = "Cliente básico de Python para interactuar con la API de Ollama"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Abel Garza Ramírez", email = "abel@ciberdata.net"},
+]
+dependencies = [
+    "requests>=2.31.0",
+    "ollama>=0.1.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+]
