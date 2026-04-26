@@ -177,7 +177,7 @@ class VoiceChatApp(ctk.CTk):
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Gemma 4 PTT Voice Chat UI")
-    parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL", "gemma4-audio:latest"))
+    parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL_AUDIO", "gemma4-audio:latest"))
     parser.add_argument("--host", default=os.getenv("OLLAMA_HOST", "http://localhost:11434"))
     parser.add_argument("--source", default=os.getenv("AUDIO_SOURCE", "default"))
     parser.add_argument("--sample-rate", type=int, default=int(os.getenv("AUDIO_SAMPLE_RATE", 16000)))

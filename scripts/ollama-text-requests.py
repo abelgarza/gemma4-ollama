@@ -1,10 +1,12 @@
+import os
 import requests
 import json
 
-url = "http://localhost:11434/api/generate"
+url = os.getenv("OLLAMA_HOST", "http://localhost:11434").rstrip("/") + "/api/generate"
+model = os.getenv("OLLAMA_MODEL", "gemma4:latest")
 
 payload = {
-    "model": "gemma4:latest",
+    "model": model,
     "prompt": "Hola",
     "stream": False
 }

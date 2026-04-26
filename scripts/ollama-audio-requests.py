@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import requests
 from pathlib import Path
 
@@ -10,7 +11,7 @@ DEFAULT_AUDIO = Path(__file__).parent.parent / "data" / "sample-audio" / "sample
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default="gemma4:latest")
+    parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL_AUDIO", "gemma4-audio:latest"))
     parser.add_argument("--audio", default=str(DEFAULT_AUDIO))
     parser.add_argument("--url", default="http://localhost:11434/api/generate")
     parser.add_argument(

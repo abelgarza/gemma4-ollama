@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -111,9 +112,9 @@ DEFAULT_WORKDIR = Path(__file__).parent.parent / "data" / "live-audio"
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default="gemma4:latest")
-    parser.add_argument("--host", default="http://localhost:11434")
-    parser.add_argument("--source", default="RDPSource")
+    parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL_AUDIO", "gemma4-audio:latest"))
+    parser.add_argument("--host", default=os.getenv("OLLAMA_HOST", "http://localhost:11434"))
+    parser.add_argument("--source", default=os.getenv("AUDIO_SOURCE", "RDPSource"))
     parser.add_argument("--seconds", type=float, default=5.0)
     parser.add_argument("--sample-rate", type=int, default=16000)
     parser.add_argument("--workdir", default=str(DEFAULT_WORKDIR))
