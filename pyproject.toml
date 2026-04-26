@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ollama-python-client"
-version = "0.1.0"
-description = "Cliente básico de Python para interactuar con la API de Ollama"
+version = "0.0.1"
+description = "Demo de capacidades auditivas de Gemma4"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {file = "LICENSE"}
