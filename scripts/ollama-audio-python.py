@@ -2,15 +2,17 @@ from __future__ import annotations
 
 import argparse
 import os
+from pathlib import Path
 
 import ollama
 
 from audio_gemma4_ollama import wav_to_base64
 
+DEFAULT_AUDIO = Path(__file__).parent.parent / "data" / "sample-audio" / "sample.wav"
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--audio", default="data/sample-audio/sample.wav")
+    parser.add_argument("--audio", default=str(DEFAULT_AUDIO))
     parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL", "gemma4:latest"))
     parser.add_argument(
         "--prompt",

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "audio-gemma4-ollama"
-version = "1.0.0"
-description = "Proper src-layout migration for Gemma4 audio capabilities"
+version = "1.0.1"
+description = "Gemma4 audio capabilities"
 readme = "README.md"
 requires-python = ">=3.11"
 license = {file = "LICENSE"}

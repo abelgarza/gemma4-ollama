@@ -107,6 +107,8 @@ def stream_generate(
         return field(response, "context", final_context)
 
 
+DEFAULT_WORKDIR = Path(__file__).parent.parent / "data" / "live-audio"
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="gemma4:latest")
@@ -114,7 +116,7 @@ def main() -> None:
     parser.add_argument("--source", default="RDPSource")
     parser.add_argument("--seconds", type=float, default=5.0)
     parser.add_argument("--sample-rate", type=int, default=16000)
-    parser.add_argument("--workdir", default="data/live-audio")
+    parser.add_argument("--workdir", default=str(DEFAULT_WORKDIR))
     parser.add_argument("--keep-audio", action="store_true")
     args = parser.parse_args()
 
