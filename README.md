@@ -47,8 +47,49 @@ This project implements a clean experimental memory layer that lives outside the
 
 ### Managing Memory
 
-- **Add Memory**: `.venv/bin/python scripts/memory-add.py --text "User likes coffee" --kind preference --source text --tag user`
-- **Search Memory**: `.venv/bin/python scripts/memory-search.py --query "What does the user like?"`
+The project uses two primary scripts to interact with the external memory layer.
+
+#### 1. Adding Memory (`scripts/memory-add.py`)
+Stores new information in both a history file (`JSONL`) and a semantic vector database (`SQLite`).
+
+**Required Parameters:**
+* `--text`: The content or fact to remember (e.g., `"The production server IP is 192.168.1.100"`).
+* `--kind`: The category of the information (e.g., `preference`, `technical_context`, `fact`, `rule`).
+* `--source`: Where this memory came from (e.g., `user_input`, `text`, `audio_chat`).
+
+**Optional Parameters:**
+* `--tag`: Tags to organize or filter memories. Can be used multiple times (e.g., `--tag devops --tag server`).
+* `--confidence`: A float indicating the certainty of the memory (default: `1.0`).
+
+**Example:**
+```bash
+.venv/bin/python scripts/memory-add.py --text "User likes coffee" --kind "preference" --source "user_input" --tag "user" --tag "beverage" --confidence 1.0
+```
+
+#### 2. Searching Memory (`scripts/memory-search.py`)
+Queries the stored memories using Gemma's text embeddings.
+
+**Parameters:**
+* `--query` (Required): The phrase or concept to search for.
+* `--top-k` (Optional): The maximum number of results to return.
+
+**Example:**
+```bash
+.venv/bin/python scripts/memory-search.py --query "What does the user like?" --top-k 3
+```
+
+#### 3. Resetting Memory (`scripts/memory-reset.py`)
+Performs a hard reset by deleting the existing memory files (`JSONL` and `SQLite`) and initializing fresh, empty databases.
+
+**Parameters:**
+* `--force` (Optional): Bypasses the interactive confirmation prompt.
+
+**Example:**
+```bash
+.venv/bin/python scripts/memory-reset.py
+# Or to skip confirmation:
+.venv/bin/python scripts/memory-reset.py --force
+```
 
 ## Usage and Examples
 
