@@ -3,12 +3,12 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "audio-gemma4-ollama"
+name = "gemma4-ollama"
 version = "2.0.0"
 description = "Gemma4-Ollama python framework"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {file = "LICENSE"}
+license = {text = "Apache-2.0"}
 authors = [
     {name = "Abel Garza Ramírez", email = "abel@ciberdata.net"},
 ]

@@ -4,7 +4,7 @@ import argparse
 import requests
 from pathlib import Path
 
-from audio_gemma4_ollama import wav_to_base64
+from gemma4_ollama.audio import wav_to_base64
 
 DEFAULT_AUDIO = Path(__file__).parent.parent / "data" / "sample-audio" / "sample.wav"
 

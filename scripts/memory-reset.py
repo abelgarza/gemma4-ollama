@@ -1,7 +1,7 @@
 import os
 import argparse
 from dotenv import load_dotenv
-from audio_gemma4_ollama.vector_store import init_db
+from gemma4_ollama.memory import init_db
 
 def main():
     parser = argparse.ArgumentParser(description="Hard reset the memory storage.")

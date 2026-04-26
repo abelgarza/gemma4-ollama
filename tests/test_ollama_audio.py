@@ -4,7 +4,7 @@ import base64
 from pathlib import Path
 
 import pytest
-from audio_gemma4_ollama import read_wav_as_base64, wav_to_base64
+from gemma4_ollama.audio import read_wav_as_base64, wav_to_base64
 
 
 def test_imports():

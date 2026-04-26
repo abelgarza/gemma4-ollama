@@ -2,9 +2,8 @@ import argparse
 import uuid
 import os
 from dotenv import load_dotenv
-from audio_gemma4_ollama.memory import append_memory
-from audio_gemma4_ollama.embeddings import embed_text
-from audio_gemma4_ollama.vector_store import init_db, upsert_vector
+from gemma4_ollama.memory import append_memory, init_db, upsert_vector
+from gemma4_ollama.embeddings import embed_text
 
 # Load environment variables
 load_dotenv()

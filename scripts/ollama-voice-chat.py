@@ -8,7 +8,7 @@ from typing import Any
 
 import ollama
 
-from audio_gemma4_ollama import wav_to_base64
+from gemma4_ollama.audio import wav_to_base64
 
 
 VOICE_TURN_PROMPT = """

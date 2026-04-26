@@ -1,8 +1,8 @@
 import argparse
 import os
 from dotenv import load_dotenv
-from audio_gemma4_ollama.embeddings import embed_text
-from audio_gemma4_ollama.vector_store import search_vectors
+from gemma4_ollama.embeddings import embed_text
+from gemma4_ollama.memory import search_vectors
 
 # Load environment variables
 load_dotenv()
