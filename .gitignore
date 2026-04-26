@@ -3,11 +3,17 @@ __pycache__/
 .venv/
 .envrc
 .env
-data/live-audio/
-data/memory/vectors.sqlite
-data/cache/
-# Ignore memory JSONL by default as it might contain private data
-data/memory/memory.jsonl
 *.egg-info/
 dist/
 build/
+
+# === Data Security ===
+# Ignore everything in data/
+data/**/*
+
+# Allow directory structure through .gitkeep files
+!data/**/
+!data/**/*.gitkeep
+
+# Explicitly allow the test sample
+!data/sample-audio/sample.wav
