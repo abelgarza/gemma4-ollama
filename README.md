@@ -1,6 +1,6 @@
 # Audio Gemma4 Ollama
 
-A Python project demonstrating audio and text interaction capabilities with the Gemma4 model via a local Ollama instance. This project uses a proper `src-layout` for reliable module resolution.
+A Python project demonstrating audio and text interaction capabilities with the Gemma4 model via a local Ollama instance. This project uses a proper `src-layout` for reliable module resolution and includes an experimental external memory layer.
 
 ## Installation
 
@@ -13,6 +13,42 @@ pip install -e ".[dev]"
 ```
 
 *Note: You must have `ffmpeg` installed on your system for the voice recording features to work.*
+
+## Configuration
+
+The project uses environment variables for configuration. Copy the example file and adjust the values as needed:
+
+```bash
+cp .env.example .env
+```
+
+The default configuration points to:
+- **Model**: `gemma4-audio:latest` (Memory-aware)
+- **Embedding**: `embeddinggemma:300m-qat-q4_0`
+- **Ollama**: `http://localhost:11434`
+
+## External Memory Layer
+
+This project implements a clean experimental memory layer that lives outside the LLM. The `gemma4-audio:latest` model is designed to be "memory-aware", meaning it can utilize context injected into the prompt via the following placeholders:
+- `MEMORY`: High-confidence relevant context.
+- `MEMORY_CANDIDATES`: Potential matches for the current interaction.
+
+### Memory Setup
+
+1. **Pull the embedding model**:
+   ```bash
+   ollama pull embeddinggemma:300m-qat-q4_0
+   ```
+
+2. **Create the memory-aware model**:
+   ```bash
+   ollama create gemma4-audio:latest -f models/gemma4-audio.Modelfile
+   ```
+
+### Managing Memory
+
+- **Add Memory**: `.venv/bin/python scripts/memory-add.py --text "User likes coffee" --kind preference --source text --tag user`
+- **Search Memory**: `.venv/bin/python scripts/memory-search.py --query "What does the user like?"`
 
 ## Usage and Examples
 
