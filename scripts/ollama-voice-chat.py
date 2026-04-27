@@ -9,7 +9,7 @@ from typing import Any
 
 import ollama
 
-from gemma4_ollama.audio import wav_to_base64
+from gemma4_ollama.audio import audio_to_base64
 
 
 VOICE_TURN_PROMPT = """
@@ -149,7 +149,7 @@ def main() -> None:
                 sample_rate=args.sample_rate,
             )
 
-            image_b64 = wav_to_base64(wav_path)
+            image_b64 = audio_to_base64(wav_path)
 
             print("assistant: ", end="", flush=True)
             context = stream_generate(

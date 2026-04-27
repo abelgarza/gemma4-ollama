@@ -6,7 +6,7 @@ from pathlib import Path
 
 import ollama
 
-from gemma4_ollama.audio import wav_to_base64
+from gemma4_ollama.audio import audio_to_base64
 
 DEFAULT_AUDIO = Path(__file__).parent.parent / "data" / "sample-audio" / "sample.wav"
 
@@ -24,7 +24,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    audio_b64 = wav_to_base64(args.audio)
+    audio_b64 = audio_to_base64(args.audio)
 
     response = ollama.generate(
         model=args.model,

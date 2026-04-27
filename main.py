@@ -11,7 +11,7 @@ import customtkinter as ctk
 import ollama
 from dotenv import load_dotenv
 
-from gemma4_ollama.audio import wav_to_base64, speak
+from gemma4_ollama.audio import audio_to_base64, speak
 
 # Configuración visual de la ventana
 ctk.set_appearance_mode("dark")
@@ -144,7 +144,7 @@ class VoiceChatApp(ctk.CTk):
         self.after(0, lambda: self.update_status("Gemma 4 pensando...", "#f1c40f"))
         
         try:
-            audio_b64 = wav_to_base64(wav_path)
+            audio_b64 = audio_to_base64(wav_path)
             response = self.client.generate(
                 model=self.args.model,
                 prompt=SYSTEM_PROMPT,

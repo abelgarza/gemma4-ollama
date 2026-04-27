@@ -5,7 +5,7 @@ import os
 import requests
 from pathlib import Path
 
-from gemma4_ollama.audio import wav_to_base64
+from gemma4_ollama.audio import audio_to_base64
 
 DEFAULT_AUDIO = Path(__file__).parent.parent / "data" / "sample-audio" / "sample.wav"
 
@@ -27,7 +27,7 @@ def main() -> None:
     payload = {
         "model": args.model,
         "prompt": args.prompt,
-        "images": [wav_to_base64(args.audio)],
+        "images": [audio_to_base64(args.audio)],
         "stream": False,
     }
 

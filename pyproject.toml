@@ -17,7 +17,11 @@ dependencies = [
     "requests",
     "python-dotenv",
     "gTTS",
-    "customtkinter"
+    "customtkinter",
+    "faster-whisper",
+    "torch",
+    "nvidia-cublas-cu12",
+    "nvidia-cudnn-cu12"
 ]
 
 [tool.setuptools.packages.find]
