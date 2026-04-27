@@ -1,9 +1,26 @@
 # Gemma4 Ollama
 
-Project used to demonstrate audio, text, and embeddings interaction capabilities with the Gemma4 model via a local Ollama instance.
+This repository is a dedicated environment for exploring the capabilities of the **Gemma4** model—including audio, image, and text—via a local **Ollama** instance.
 
-This project uses a modular `src-layout` (`gemma4_ollama`) for reliable module resolution.
+## Project Structure
+
+* **/src/gemma4_ollama**: Core logic and modular implementation using `src-layout`.
+* **/scripts**: Executable scripts for direct testing and interaction.
+
+## Installation
+
+To ensure reliable module resolution, install the package in editable mode:
+
+```bash
+pip install -e .
+```
 
 ## License
 
-This project is licensed under the **Apache License 2.0** - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **Apache License 2.0**.
+
+---
+
+### Key Corrections:
+* **Added "via":** In your draft, the sentence ended with "text a local Ollama instance," which lacked the preposition to connect the model to the platform.
+* **Punctuation:** Added a comma after "image" (Oxford comma) and em-dashes around the capability list for better readability.
