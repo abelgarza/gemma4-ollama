@@ -20,7 +20,3 @@ pip install -e .
 This project is licensed under the **Apache License 2.0**.
 
 ---
-
-### Key Corrections:
-* **Added "via":** In your draft, the sentence ended with "text a local Ollama instance," which lacked the preposition to connect the model to the platform.
-* **Punctuation:** Added a comma after "image" (Oxford comma) and em-dashes around the capability list for better readability.
