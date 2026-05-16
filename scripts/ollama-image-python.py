@@ -13,7 +13,7 @@ DEFAULT_IMAGE = Path(__file__).parent.parent / "data" / "sample-image" / "sample
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--image", default=str(DEFAULT_IMAGE))
-    parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL_AUDIO", "gemma4:latest"))
+    parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL", "gemma4:latest"))
     parser.add_argument(
         "--prompt",
         default=(
