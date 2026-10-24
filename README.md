@@ -15,6 +15,17 @@ To ensure reliable module resolution, install the package in editable mode:
 pip install -e .
 ```
 
+## Modelfiles externos
+
+Los Modelfiles de otros repositorios se sincronizan de forma opcional en `models/public/` y `models/private/`, sin copiarlos al historial de este repositorio público.
+
+```bash
+bash scripts/sync-models.sh
+bash scripts/sync-models.sh --with-private  # requiere acceso y repo privado inicializado
+```
+
+Consulta [models/README.md](models/README.md) para más detalles.
+
 ## Aprendizaje Matemático (KPIs Vectoriales)
 
 Se han añadido scripts en `/scripts` para aprender la matemática detrás de los embeddings sin librerías de alto nivel:
