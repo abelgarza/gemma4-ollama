@@ -18,3 +18,8 @@ data/**/*
 # Explicitly allow the test sample
 !data/sample-audio/sample.wav
 !data/sample-image/sample.png
+
+# Independent public/private Modelfile clones.
+# In particular, never commit private Modelfiles to this public repo.
+models/public/
+models/private/
