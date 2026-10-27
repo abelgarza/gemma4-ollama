@@ -5,7 +5,7 @@ This repository is a dedicated environment for exploring the capabilities of the
 ## Project Structure
 
 * **/src/gemma4_ollama**: Core logic and modular implementation using `src-layout`.
-* **/scripts**: Executable scripts for direct testing and interaction.
+* **/scripts**: Executable scripts for direct testing and interaction, including the voice-chat GUI (`ollama-voice-chat-gui.py`).
 
 ## Installation
 
@@ -14,6 +14,15 @@ To ensure reliable module resolution, install the package in editable mode:
 ```bash
 pip install -e .
 ```
+
+## Voice experiments
+
+```bash
+python scripts/ollama-voice-chat-gui.py --debug-context
+python scripts/ollama-voice-chat.py --debug-context
+```
+
+Both experiments attempt to reuse Ollama's in-session `generate` context. `--debug-context` reports whether the server returns a token context; neither experiment saves persistent conversational memory. The voice GUI was previously located in root `main.py`.
 
 ## Modelfiles externos
 
