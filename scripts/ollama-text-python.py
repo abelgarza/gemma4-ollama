@@ -1,5 +1,8 @@
 import os
+from dotenv import load_dotenv
 import ollama
+
+load_dotenv()
 
 model = os.getenv("OLLAMA_MODEL", "gemma4:latest")
 
