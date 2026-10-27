@@ -119,6 +119,7 @@ def main() -> None:
     parser.add_argument("--sample-rate", type=int, default=16000)
     parser.add_argument("--workdir", default=str(DEFAULT_WORKDIR))
     parser.add_argument("--keep-audio", action="store_true")
+    parser.add_argument("--debug-context", action="store_true", help="Print Ollama context diagnostics")
     args = parser.parse_args()
 
     client = ollama.Client(host=args.host)
@@ -163,6 +164,9 @@ def main() -> None:
             if not args.keep_audio:
                 wav_path.unlink(missing_ok=True)
 
+            if args.debug_context:
+                size = len(context) if context is not None else None
+                print(f"[context] CLI response tokens={size}; available={context is not None}")
             print()
 
     except KeyboardInterrupt:
