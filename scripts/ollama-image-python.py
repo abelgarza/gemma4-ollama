@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import argparse
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 
 import ollama
 
 from gemma4_ollama.image import image_to_base64
+
+load_dotenv()
 
 DEFAULT_IMAGE = Path(__file__).parent.parent / "data" / "sample-image" / "sample.png"
 
