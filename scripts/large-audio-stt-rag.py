@@ -3,6 +3,9 @@ import os
 import sys
 from pathlib import Path
 import ollama
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Ensure src is in the path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
@@ -15,8 +18,8 @@ from gemma4_ollama.memory.vector_store import init_db, upsert_vector, search_vec
 def main():
     parser = argparse.ArgumentParser(description="Large Audio Analysis using STT + RAG")
     parser.add_argument("--audio", default="data/sample-audio/sample-earnings.mp3")
-    parser.add_argument("--model", default="gemma4:latest")
-    parser.add_argument("--embed-model", default="embeddinggemma:300m-qat-q4_0")
+    parser.add_argument("--model", default=os.getenv("OLLAMA_MODEL", "gemma4:latest"))
+    parser.add_argument("--embed-model", default=os.getenv("EMBEDDING_MODEL", "embeddinggemma:300m-qat-q4_0"))
     parser.add_argument("--prompt", default="As an investor, what are the 3 most important points I need to consider when deciding whether or not to continue investing with them next year?")
     parser.add_argument("--whisper-model", default="base", help="tiny, base, small, medium, large-v3")
     parser.add_argument("--reset", action="store_true", help="Reset the vector database before starting")
