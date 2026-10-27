@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import os
+from dotenv import load_dotenv
 import subprocess
 import sys
 from pathlib import Path
@@ -11,6 +12,8 @@ import ollama
 
 from gemma4_ollama.audio import audio_to_base64
 
+
+load_dotenv()
 
 VOICE_TURN_PROMPT = """
 The attached audio is the user's next spoken message in this conversation.
