@@ -7,6 +7,16 @@ This repository is a dedicated environment for exploring the capabilities of the
 * **/src/gemma4_ollama**: Core logic and modular implementation using `src-layout`.
 * **/scripts**: Executable scripts for direct testing and interaction, including the voice-chat GUI (`ollama-voice-chat-gui.py`).
 
+## Environment configuration
+
+Copy `.env.example` to `.env`, then set `OLLAMA_MODEL` to a model installed in your local Ollama. Model experiments load `.env` using `python-dotenv`; embedding and memory experiments use the independent `EMBEDDING_MODEL`. A command-line `--model` (or `--embed-model` in the audio-RAG experiment) overrides the environment value. The `.env` file is ignored by Git. Voice-chat experiments do not automatically read persistent memory.
+
+```bash
+cp .env.example .env
+ollama list
+python scripts/ollama-text-python.py
+```
+
 ## Installation
 
 To ensure reliable module resolution, install the package in editable mode:
