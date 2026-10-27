@@ -1,6 +1,9 @@
 import os
+from dotenv import load_dotenv
 import requests
 import json
+
+load_dotenv()
 
 url = os.getenv("OLLAMA_HOST", "http://localhost:11434").rstrip("/") + "/api/generate"
 model = os.getenv("OLLAMA_MODEL", "gemma4:latest")
