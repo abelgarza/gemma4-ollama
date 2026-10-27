@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import argparse
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 
 import ollama
 
 from gemma4_ollama.audio import audio_to_base64
+
+load_dotenv()
 
 DEFAULT_AUDIO = Path(__file__).parent.parent / "data" / "sample-audio" / "sample.wav"
 
