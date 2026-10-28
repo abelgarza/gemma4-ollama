@@ -102,6 +102,8 @@ def main():
     ap.add_argument('--context-lines', type=int, default=45, help='Visible lines before and after gap')
     ap.add_argument('--temperature', type=float, default=0)
     ap.add_argument('--num-ctx', type=int, default=4096)
+    ap.add_argument('--num-predict', type=int, default=160, help='Maximum generated tokens including thinking')
+    ap.add_argument('--think', action='store_true', help='Explicitly enable thinking; off by default')
     ap.add_argument('--out', type=Path, default=Path('benchmark-runs'))
     args = ap.parse_args()
     repo = args.repo.expanduser().resolve()
@@ -114,7 +116,7 @@ def main():
     lines = target.read_text(encoding='utf-8').splitlines()
     if args.line < 1 or args.lines < 1 or args.line + args.lines - 1 > len(lines):
         ap.error('--line/--lines must point to existing lines')
-    if args.top_k < 0 or args.num_ctx < 512 or args.chunk_lines < 1 or args.context_lines < 1:
+    if args.top_k < 0 or args.num_ctx < 512 or args.chunk_lines < 1 or args.context_lines < 1 or args.num_predict < 1:
         ap.error('Invalid budget parameters')
     before = lines[max(0, args.line - 1 - args.context_lines):args.line - 1]
     gold = lines[args.line - 1:args.line - 1 + args.lines]
@@ -154,17 +156,27 @@ SOURCE AFTER GAP:
 {chr(10).join(after)}'''
     # Reject tasks that are too big for intended small-model context. Rough token estimate.
     estimated = len(prompt) // 4
-    if estimated + 350 > args.num_ctx:
+    if estimated + args.num_predict > args.num_ctx:
         raise SystemExit(f'Prompt estimated ~{estimated} tokens exceeds --num-ctx {args.num_ctx}; lower --top-k/--context-lines/--chunk-lines.')
     start_gen = time.monotonic()
-    resp = api(args.host, '/api/chat', {'model':args.model, 'messages':[{'role':'system','content':'Complete the missing code span faithfully. Output code only.'},{'role':'user','content':prompt}], 'options':{'temperature':args.temperature,'num_ctx':args.num_ctx}, 'stream':False}, timeout=600)
+    resp = api(args.host, '/api/chat', {'model':args.model, 'messages':[{'role':'system','content':'Complete the missing code span faithfully. Output code only.'},{'role':'user','content':prompt}], 'options':{'temperature':args.temperature,'num_ctx':args.num_ctx,'num_predict':args.num_predict}, 'think':args.think, 'stream':False}, timeout=600)
     elapsed = time.monotonic() - start_gen
-    raw = resp.get('message',{}).get('content','')
+    message = resp.get('message') or {}
+    raw = message.get('content') or ''
+    thinking = message.get('thinking') or ''
+    done_reason = resp.get('done_reason')
     prediction = raw.strip('\n')
     if prediction.startswith('```'):
         pieces = prediction.splitlines()
         prediction = '\n'.join(pieces[1:-1]) if pieces[-1].strip()=='```' else prediction
     expected = '\n'.join(gold)
+    prediction_lines = prediction.splitlines() if prediction else []
+    if not prediction_lines:
+        failure = 'empty_output'
+    elif len(prediction_lines) != args.lines:
+        failure = 'line_count_mismatch'
+    else:
+        failure = None
     exact = prediction == expected
     similarity = difflib.SequenceMatcher(None, prediction, expected).ratio()
     syntax = None
@@ -175,6 +187,8 @@ SOURCE AFTER GAP:
             syntax = True
         except SyntaxError:
             syntax = False
+    if failure is None and syntax is False:
+        failure = 'invalid_python_syntax'
     try:
         sha = subprocess.run(['git','-C',str(repo),'rev-parse','HEAD'],capture_output=True,text=True,check=True).stdout.strip()
     except (OSError,subprocess.CalledProcessError):
@@ -183,7 +197,9 @@ SOURCE AFTER GAP:
     runid = stamp + '-' + hashlib.sha256((str(relative)+str(args.line)).encode()).hexdigest()[:7]
     run = args.out / runid
     run.mkdir(parents=True,exist_ok=False)
-    data = {'run_id':runid,'timestamp_utc':stamp,'repo':str(repo),'git_commit':sha,'target':str(relative),'hidden_line':args.line,'hidden_lines':args.lines,'model':args.model,'embed_model':args.embed_model,'num_ctx':args.num_ctx,'top_k':args.top_k,'estimated_prompt_tokens':estimated,'retrieval':{'candidate_chunks':len(pool),'cache_hits':hit,'query_cached':query_cached,'seconds':round(retrieval_elapsed,3),'top':refs},'generation':{'seconds':round(elapsed,3),'prompt_eval_count':resp.get('prompt_eval_count'),'eval_count':resp.get('eval_count')},'metrics':{'exact_match':exact,'similarity_ratio':round(similarity,4),'python_syntax_valid':syntax},'prediction':prediction,'expected':expected}
+    data = {'run_id':runid,'timestamp_utc':stamp,'repo':str(repo),'git_commit':sha,'target':str(relative),'hidden_line':args.line,'hidden_lines':args.lines,'model':args.model,'embed_model':args.embed_model,'num_ctx':args.num_ctx,'num_predict':args.num_predict,'think':args.think,'top_k':args.top_k,'estimated_prompt_tokens':estimated,'retrieval':{'candidate_chunks':len(pool),'cache_hits':hit,'query_cached':query_cached,'seconds':round(retrieval_elapsed,3),'top':refs},'generation':{'seconds':round(elapsed,3),'prompt_eval_count':resp.get('prompt_eval_count'),'eval_count':resp.get('eval_count'),'done_reason':done_reason,'thinking_chars':len(thinking),'content_chars':len(raw),'prediction_lines':len(prediction_lines),'failure':failure},'metrics':{'exact_match':exact,'similarity_ratio':round(similarity,4),'python_syntax_valid':syntax},'prediction':prediction,'expected':expected}
+    (run/'ollama_response.json').write_text(json.dumps(resp,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    (run/'thinking.txt').write_text(thinking,encoding='utf-8')
     (run/'result.json').write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     (run/'prompt.txt').write_text(prompt,encoding='utf-8')
     (run/'prediction.txt').write_text(prediction+'\n',encoding='utf-8')
@@ -196,7 +212,8 @@ Target: {relative} lines {args.line}-{args.line+args.lines-1}
 Model: {args.model} | Embeddings: {args.embed_model}
 Indexed candidates: {len(pool)} | Cached: {hit} | Retrieval: {retrieval_elapsed:.2f}s
 Prompt estimate: ~{estimated} tokens | Ollama prompt tokens: {resp.get('prompt_eval_count')}
-Generation: {elapsed:.2f}s | Output tokens: {resp.get('eval_count')}
+Generation: {elapsed:.2f}s | Output tokens: {resp.get('eval_count')} | Done: {done_reason}
+Thinking chars: {len(thinking)} | Content chars: {len(raw)} | Lines: {len(prediction_lines)}/{args.lines} | Failure: {failure}
 Exact: {exact} | Similarity: {similarity:.3f} | Python syntax: {syntax}
 Retrieved:
 '''+''.join(f"  {s:.4f}  {c['file']}:{c['start']}-{c['end']}\n" for s,c in ranked)+f'\nDiff:\n{diff}\n'
