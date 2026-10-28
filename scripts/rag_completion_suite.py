@@ -72,6 +72,8 @@ def discover(repo: Path):
     used = set()
     for kind in KINDS:
         base = kind.replace("cross_file_", "")
+        if base == "condition":
+            base = "conditional"
         options = candidates[base]
         # Cross-file tasks prioritize source files with imports; the benchmark
         # does not assume that a cross-file dependency is truly required.
