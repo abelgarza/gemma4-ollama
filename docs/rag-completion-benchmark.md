@@ -56,3 +56,18 @@ En dos ejecuciones con E2B, Ollama contabilizó más de 2,000 tokens de salida, 
 Prueba sin RAG: `python scripts/rag_completion_benchmark.py --repo ~/dev/benchmark-targets/gemma4-ollama --file src/gemma4_ollama/audio/core.py --line 35 --lines 5 --top-k 0 --model gemma4:e2b --num-predict 160 --out benchmark-runs`.
 
 Prueba con RAG: el mismo comando con `--top-k 4`. `--think` habilita explícitamente el razonamiento para pruebas comparativas posteriores.
+
+
+## Suite reproducible de hasta diez ejercicios
+
+`scripts/rag_completion_suite.py` descubre posiciones mediante el AST de Python en el clon objetivo. Selecciona asignaciones, retornos, llamadas, condicionales, excepciones y funciones cortas, y añade cuatro casos etiquetados de exploración entre archivos. Esas etiquetas **no demuestran** por sí mismas que la tarea requiera información de otro archivo; son candidatos heurísticos que deben revisarse manualmente.
+
+```bash
+python scripts/rag_completion_suite.py \
+  --repo ~/dev/benchmark-targets/gemma4-ollama --dry-run
+python scripts/rag_completion_suite.py \
+  --repo ~/dev/benchmark-targets/gemma4-ollama \
+  --model gemma4:e2b --modes 0,2,4
+```
+
+La suite guarda el manifiesto con SHA en `benchmark-runs/batch-*/manifest.json`, ejecuciones y errores en `runs.json`; cada caso conserva los archivos detallados generados por el benchmark existente. La suite no ejecuta pruebas del repositorio objetivo y no modifica su contenido. Los casos deben inspeccionarse antes de utilizarlos para concluir eficacia de RAG.
